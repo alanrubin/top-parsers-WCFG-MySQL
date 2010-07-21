@@ -1,0 +1,13 @@
+S_0 -> BK_0 0.6
+S_0 -> AUS_0 0.3
+S_0 -> GNR_0 0.1
+BK_0 -> AUS_0 TD_0 0.3
+BK_0 -> TD_0 AUS_0 0.3
+BK_0 -> AUS_0 GNR_0 0.4
+BK_0 -> GNR_0 AUS_0 0.1
+AUS_0 -> AUS_0 AU_0 0.6
+AUS_0 -> AU_0 0.4
+TD_0 -> TL_0 0.4
+TD_0 -> KWS_0 0.6
+KWS_0 -> KW_0 0.5
+KWS_0 -> KW_0 KWS_0 0.5
