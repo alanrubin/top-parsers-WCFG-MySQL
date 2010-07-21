@@ -1,0 +1,53 @@
+> 2 start files:
+
+1) Lexicon
+NonTerminal -> Terminal [probability1, probability2] = NonTerminal_0 -> Terminal [probability1] / NonTerminal_1 -> Terminal [probability2] 
+Ex: TL orlando [0.1]
+Ex: NNP Cook [2.7438834044811176E-5, 2.3530841982858987E-5, 9.817153218330053E-4, 1.9063393000286787E-5, 1.909929899480372E-5, 1.9717498652996713E-5, 1.9037059866125984E-5, 0.0019883280018540106, 1.9062740208151878E-5, 1.899743006916441E-5, 1.893898364244023E-5, 1.8938144733718084E-5, 1.903468843845703E-5, 2.0602498262770175E-5, 2.1317966873089495E-5, 7.34145032479859E-4, 1.8974241230613564E-5, 1.8992696012406357E-5, 1.8949268702766574E-5, 1.8936960616035962E-5, 0.0015983407927540536, 2.3995915653059935E-5, 1.895655993509648E-5, 1.8975452320866963E-5, 1.8993807920526554E-5, 1.892600166343756E-5, 1.8946396396034054E-5, 1.8984801552319296E-5, 1.8923394531073018E-5, 1.892430742082837E-5, 1.895883994190658E-5, 1.8953161828765472E-5, 2.331929889319886E-6, 2.245702523555444E-6, 2.0080565372788035E-6, 1.9914058748967568E-6, 1.9769687128432872E-6, 1.9525503032872276E-6, 1.9536861614238707E-6, 1.942155759726306E-6, 1.9840436260425478E-6, 1.9474850854559807E-6, 2.013926130355449E-6, 1.957929123581818E-6, 2.0651947699289085E-6, 1.980050722347637E-6, 2.3836215273002027E-6, 2.2562427464115584E-6, 1.9507549997182047E-6, 1.9469286885368053E-6, 2.0205732478224417E-6, 1.97860815852031E-6, 1.932832113549333E-6, 1.9888325128196955E-6, 1.998040802310058E-6, 2.1008411265665826E-6, 2.0152644174089585E-6, 2.0001253718172E-6, 1.967234224337037E-6, 2.927401846045328E-6, 1.6041621858701904E-4, 3.546312305654022E-4, 3.25282863810484E-6], 
+which is equal to
+NNP_0 Cook [2.7438834044811176E-5]
+NNP_1 Cook [2.3530841982858987E-5]
+NNP_2 Cook [9.817153218330053E-4]
+
+2) grammar (rules)
+NonTerminal -> NonTerminal1 probability (unary)
+NonTerminal -> NonTerminal1 NonTerminal2 probability (binary)
+
+> 4 Processing files / Tables
+
+1) /tmp/IcdtUnaryGrammar.txt : Store unary grammar rules; exchange grammar names for code
+Table: UnaryGrammar; Format: | HEAD | BODY | WEIGHT |
+Indexes: (BODY)
+
+Ex: 0+1+5 (0 -> code for NonTerminal, 1 -> code for NonTerminal1, 5 is probability normalized)
+
+2) /tmp/IcdtBinaryGrammar.txt : Store binary grammar rules; exchange grammar names for code
+Table: BinaryGrammar; Format: | HEAD | BODY1 | BODY2 | WEIGHT |
+Index: (BODY1, BODY2)
+Order (Initial): (BODY1,BODY2)
+
+Ex: 1+2+4+12 (1 -> code for NonTerminal, 2 -> code for NonTerminal1, 4 -> code for NonTerminal2, 12 is probability normalized)
+
+3) /tmp/IcdtLexicon.txt : Store lexicon (nonterminal -> terminal) and weights
+Table: Lexicon; Format: | NONTERMINAL | TERMINAL | WEIGHT |
+Indexes: (TERMINAL)
+
+Ex: 6+orlando+23 (6 for NonTerminal_0, 'orlando' for Terminal, 23 is probability normalized) 
+
+4) /tmp/IcdtNonterminals.txt  : Code table > NonTerminalName = code for NonTerminal
+Table: Nonterminals; Format: | name | value |
+Indexes: PK(name), UNIQUE(value)
+
+Ex: AUS_0+2 (AUS_0 for NonTerminalName, 2 for NonTerminalCode)
+
+> 2 Queue tables
+
+1) queue1, queue2
+Table: queue1 / queue2; Format: | id (not important) | s | e | name (nonTerminal 'from' rule) | lchild | rchild | weight | popped | terminal |
+Indexes: (POPPED), (S), (E)
+
+> Questions:
+1) Why many NNP_x ? Does it make a difference ?
+2) Why order by (body1,body2) at BinaryGrammar table ?
+3) Why PARTITION BY HASH(body1 + 13 * body2) PARTITIONS 10 in BinaryGrammar table ?
+4) Why updatePopped1 procedure has LIMIT 5 ?
