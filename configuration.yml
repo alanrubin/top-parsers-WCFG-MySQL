@@ -3,3 +3,12 @@ database:
     username: root
     password: abc123
     host: 127.0.0.1
+    
+files:
+    unary: unary.txt
+    binary: binary.txt
+    lexicon: lexicon.txt
+    codes: codes.txt
+    
+input: berkeley # sample
+
