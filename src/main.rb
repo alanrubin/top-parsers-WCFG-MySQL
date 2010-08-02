@@ -11,4 +11,7 @@ start = Time.now
 database = DatabaseInitializer.new('127.0.0.1','root','abc123','top_parsers')
 database.drop_tables
 database.create_tables
+database.load_data_infile
+database.create_indexes
+database.create_order_by
 puts "Processed in #{Time.now - start} sec."
