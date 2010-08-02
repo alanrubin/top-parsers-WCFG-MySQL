@@ -1,6 +1,7 @@
 require "probability_normalizer"
 require "rule"
 require "codifier"
+require "rule_encoder"
 
 class DictionaryCreator
   
@@ -14,7 +15,7 @@ class DictionaryCreator
     unary = File.new("../tmp/unary.txt", "w")
     binary = File.new("../tmp/binary.txt", "w")
     File.open("../input/sample/sample.grammar").each do |line|
-      rule = Rule.new(line)
+      rule = RuleEncoder.new(Rule.new(line),@codifier)
       
       if rule.unary?
         # Write to unary file
