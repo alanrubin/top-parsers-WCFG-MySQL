@@ -11,4 +11,8 @@ class Codifier
     @table[code] = @seed
   end  
   
+  def each(&block)
+    @table.each &block
+  end
+  
 end

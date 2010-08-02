@@ -10,4 +10,14 @@ describe Codifier do
     codifier = Codifier.new
     codifier.encode("Alan").should_not eql(codifier.encode("ALAN"))
   end
+  it "should iterate through keys and values" do
+    codifier = Codifier.new
+    encode_1 = codifier.encode("Code1")
+    encode_2 = codifier.encode("Code2")
+    result = []
+    codifier.each do |name, value|
+      result << [name, value]
+    end
+    result.should eql([["Code1", encode_1], ["Code2", encode_2]])
+  end
 end
