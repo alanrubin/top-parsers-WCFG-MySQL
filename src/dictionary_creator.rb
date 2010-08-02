@@ -2,6 +2,7 @@ require "probability_normalizer"
 require "rule"
 require "codifier"
 require "rule_encoder"
+require "lexicon_rule"
 
 class DictionaryCreator
   
@@ -10,10 +11,11 @@ class DictionaryCreator
     @normalizer = ProbabilityNormalizer.new
   end
   
-  def run
+  def create_grammar
     
     unary = File.new("../tmp/unary.txt", "w")
     binary = File.new("../tmp/binary.txt", "w")
+    
     File.open("../input/sample/sample.grammar").each do |line|
       rule = RuleEncoder.new(Rule.new(line),@codifier)
       
@@ -34,7 +36,21 @@ class DictionaryCreator
     
   end
   
+  def create_lexicon
+    
+    File.open("../tmp/lexicon.txt","w") do |file|
+      File.open("../input/sample/sample.lexicon").each do |line|
+        LexiconRule.new(line).each do |from, terminal, probability|
+          file << "#{@codifier.encode(from)}+#{terminal}+#{@normalizer.normalize(probability)}\n"
+        end
+      end
+    end
+    
+  end
+  
 end
 
 # Running
-DictionaryCreator.new.run
+dictionary = DictionaryCreator.new
+dictionary.create_grammar
+dictionary.create_lexicon
