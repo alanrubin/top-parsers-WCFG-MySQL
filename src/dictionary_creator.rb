@@ -6,7 +6,8 @@ require "lexicon_rule"
 
 class DictionaryCreator
   
-  def initialize
+  def initialize(input)
+    @input = input
     @codifier = Codifier.new
     @normalizer = ProbabilityNormalizer.new
   end
@@ -17,7 +18,7 @@ class DictionaryCreator
     unary = File.new("../tmp/unary.txt", "w")
     binary = File.new("../tmp/binary.txt", "w")
     
-    File.open("../input/sample/sample.grammar").each do |line|
+    File.open("../input/#{@input}/#{@input}.grammar").each do |line|
       rule = RuleEncoder.new(Rule.new(line),@codifier)
       
       if rule.unary?
@@ -41,7 +42,7 @@ class DictionaryCreator
   def create_lexicon
     
     File.open("../tmp/lexicon.txt","w") do |file|
-      File.open("../input/sample/sample.lexicon").each do |line|
+      File.open("../input/#{@input}/#{@input}.lexicon").each do |line|
         LexiconRule.new(line).each do |from, terminal, probability|
           file << "#{@codifier.encode(from)}+#{terminal}+#{@normalizer.normalize(probability)}\n"
         end
@@ -64,7 +65,9 @@ class DictionaryCreator
 end
 
 # Running
-dictionary = DictionaryCreator.new
+start = Time.now
+dictionary = DictionaryCreator.new :berkeley
 dictionary.create_grammar
 dictionary.create_lexicon
 dictionary.create_code_table
+puts "Processed in #{Time.now - start}"
