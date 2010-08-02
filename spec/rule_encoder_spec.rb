@@ -28,4 +28,11 @@ describe RuleEncoder do
     @rule_encoder.probability.should eql(10.0)
   end
   
+  it "should not encode methods with terminal name in Rule" do
+    @rule.should_receive(:to_terminal).and_return("wolf")
+    @codifier.should_not_receive(:encode)
+    
+    @rule_encoder.to_terminal.should eql("wolf")
+  end
+  
 end
