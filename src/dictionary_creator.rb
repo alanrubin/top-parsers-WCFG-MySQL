@@ -1,10 +1,12 @@
 require "probability_normalizer"
 require "rule"
+require "codifier"
 
 class DictionaryCreator
   
   def initialize
-    
+    @codifier = Codifier.new
+    @normalizer = ProbabilityNormalizer.new
   end
   
   def run
@@ -16,9 +18,10 @@ class DictionaryCreator
       
       if rule.unary?
         # Write to unary file
-        unary << rule
+        unary << "#{rule.from}+#{rule.to_first}+#{@normalizer.normalize(rule.probability)}\n"
       else
-        binary << rule
+        # Write to binary file
+        binary << "#{rule.from}+#{rule.to_first}+#{rule.to_second}+#{@normalizer.normalize(rule.probability)}\n"
       end
       
       
@@ -30,8 +33,7 @@ class DictionaryCreator
     
   end
   
-  
-  
 end
 
+# Running
 DictionaryCreator.new.run
