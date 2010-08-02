@@ -76,7 +76,7 @@ class DatabaseInitializer
     TABLE.each do |table, description|
       unless description[:file].nil?
         file_path = File.expand_path(File.dirname(__FILE__) + description[:file])  
-        @my.query("LOAD DATA INFILE '#{file_path}' INTO TABLE #{table} FIELDS TERMINATED BY '+' LINES TERMINATED BY '\n'")
+        @my.query("LOAD DATA LOCAL INFILE '#{file_path}' INTO TABLE #{table} FIELDS TERMINATED BY '+' LINES TERMINATED BY '\n'")
       end
     end
   end
