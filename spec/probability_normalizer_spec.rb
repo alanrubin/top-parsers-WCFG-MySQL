@@ -1,5 +1,4 @@
-require "../src/probability_normalizer"
-
+require File.expand_path(File.dirname(__FILE__) + '/../src/probability_normalizer')
 #require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ProbabilityNormalizer do
