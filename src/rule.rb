@@ -25,7 +25,7 @@ class Rule
   private 
   
   def self.isNumeric(to_test)
-      Float(to_test) != nil rescue false
+      !Float(to_test).nil? rescue false
   end
   
 end
